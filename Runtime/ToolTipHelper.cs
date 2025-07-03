@@ -6,14 +6,19 @@ namespace UnityEssentials
     [RequireComponent(typeof(UIDocument))]
     public class TooltipHelper : MonoBehaviour
     {
-        [Header("Tooltip Settings")]
-        [SerializeField] private Vector2 tooltipOffset = new Vector2(15, -15);
-        [SerializeField] private string tooltipClass = "tooltip-label";
+        private struct TooltipInfo
+        {
+            public string Text;
+            public VisualElement Element;
+        }
+
+        private Vector2 _tooltipOffset = new Vector2(25, 5);
+        private string _tooltipClass = "tooltip-label";
 
         private VisualElement _root;
         private Label _tooltipLabel;
-        private string _lastTooltipText = "";
         private Vector2 _lastMousePosition = Vector2.negativeInfinity;
+        private VisualElement _lastTooltipElement;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AddTooltipHelpersToUIDocuments()
@@ -45,7 +50,7 @@ namespace UnityEssentials
             }
 
             _tooltipLabel = new Label();
-            _tooltipLabel.AddToClassList(tooltipClass);
+            _tooltipLabel.AddToClassList(_tooltipClass);
             _tooltipLabel.style.position = Position.Absolute;
             _tooltipLabel.style.visibility = Visibility.Hidden;
             _root.Add(_tooltipLabel);
@@ -62,30 +67,31 @@ namespace UnityEssentials
 
             _lastMousePosition = mousePosition;
 
-            string tooltipText = GetTooltipUnderPointer(_root.panel, mousePosition);
-            if (tooltipText != _lastTooltipText)
-            {
-                _lastTooltipText = tooltipText;
-                _tooltipLabel.text = tooltipText;
-            }
+            var tooltipInfo = GetTooltipInfoUnderPointer(_root.panel, mousePosition);
+            _tooltipLabel.pickingMode = PickingMode.Ignore;
+            _lastTooltipElement = tooltipInfo.Element;
+            if (tooltipInfo.Text != _tooltipLabel.text)
+                _tooltipLabel.text = tooltipInfo.Text;
 
-            if (string.IsNullOrEmpty(tooltipText))
+            if (string.IsNullOrEmpty(tooltipInfo.Text))
             {
                 _tooltipLabel.style.visibility = Visibility.Hidden;
                 return;
             }
 
             _tooltipLabel.style.visibility = Visibility.Visible;
-            PositionTooltip(mousePosition);
+            if (_lastTooltipElement != null)
+                PositionTooltipAtElement(_lastTooltipElement);
         }
 
-        private void PositionTooltip(Vector2 screenPosition)
+        private void PositionTooltipAtElement(VisualElement element)
         {
-            // Convert screen position to panel position
-            Vector2 panelPosition = RuntimePanelUtils.ScreenToPanel(_root.panel, screenPosition);
+            // Get the element's layout in panel space
+            var layout = element.worldBound;
 
-            float tooltipX = panelPosition.x + tooltipOffset.x;
-            float tooltipY = Screen.height - panelPosition.y + tooltipOffset.y;
+            // Convert to panel space if needed (worldBound is in panel space)
+            float tooltipX = layout.xMin + _tooltipOffset.x;
+            float tooltipY = layout.yMax + _tooltipOffset.y;
 
             // Clamp to panel bounds
             float maxX = _root.panel.visualTree.layout.width - _tooltipLabel.resolvedStyle.width - 5;
@@ -97,7 +103,7 @@ namespace UnityEssentials
             _tooltipLabel.style.top = tooltipY;
         }
 
-        private string GetTooltipUnderPointer(IPanel panel, Vector2 screenPosition)
+        private TooltipInfo GetTooltipInfoUnderPointer(IPanel panel, Vector2 screenPosition)
         {
             // Adjust y-coordinate for UI Toolkit's coordinate system
             screenPosition.y = Screen.height - screenPosition.y;
@@ -108,10 +114,10 @@ namespace UnityEssentials
             while (elementUnderPointer != null)
             {
                 if (!string.IsNullOrEmpty(elementUnderPointer.tooltip))
-                    return elementUnderPointer.tooltip;
+                    return new TooltipInfo { Text = elementUnderPointer.tooltip, Element = elementUnderPointer };
                 elementUnderPointer = elementUnderPointer.parent;
             }
-            return string.Empty;
+            return new TooltipInfo { Text = string.Empty, Element = null };
         }
     }
 }
