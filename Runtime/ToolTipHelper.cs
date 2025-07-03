@@ -70,6 +70,14 @@ namespace UnityEssentials
             var tooltipInfo = GetTooltipInfoUnderPointer(_root.panel, mousePosition);
             _tooltipLabel.pickingMode = PickingMode.Ignore;
             _lastTooltipElement = tooltipInfo.Element;
+
+            // Only show tooltip if the element is a descendant of this root
+            if (_lastTooltipElement == null || !IsDescendantOfRoot(_lastTooltipElement))
+            {
+                _tooltipLabel.style.visibility = Visibility.Hidden;
+                return;
+            }
+
             if (tooltipInfo.Text != _tooltipLabel.text)
                 _tooltipLabel.text = tooltipInfo.Text;
 
@@ -82,6 +90,17 @@ namespace UnityEssentials
             _tooltipLabel.style.visibility = Visibility.Visible;
             if (_lastTooltipElement != null)
                 PositionTooltipAtElement(_lastTooltipElement);
+        }
+
+        private bool IsDescendantOfRoot(VisualElement element)
+        {
+            while (element != null)
+            {
+                if (element == _root)
+                    return true;
+                element = element.parent;
+            }
+            return false;
         }
 
         private void PositionTooltipAtElement(VisualElement element)
