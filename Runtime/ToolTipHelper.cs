@@ -58,6 +58,7 @@ namespace UnityEssentials
 
         private void Update()
         {
+            _root ??= GetComponent<UIDocument>().rootVisualElement;
             if (_root?.panel == null)
                 return;
 
