@@ -1,15 +1,11 @@
 {
   "name": "com.unityessentials.uitooltip",
   "version": "1.0.0",
-  "displayName": "UnityEssentials UITooltip",
+  "displayName": "Unity UI Tooltip",
   "description": "This is a part of the UnityEssentials Ecosystem",
-  "unity": "2022.1",
+  "unity": "6000.0",
   "unityRelease": null,
-  "dependencies": {
-    "com.unityessentials.core": "1.0.0",
-    "com.unityessentials.resourceloader": "1.0.0",
-    "com.unityessentials.uitoolkitextensions": "1.0.0"
-  },
+  "dependencies": {},
   "keywords": [],
   "author": {
     "name": "Unity Essentials",
