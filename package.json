@@ -1,7 +1,7 @@
 {
-  "name": "com.unityessentials.uitooltip",
+  "name": "com.unityessentials.uitoolkittooltip",
   "version": "1.0.0",
-  "displayName": "Unity UI Tooltip",
+  "displayName": "Unity UI Toolkit Tooltip",
   "description": "This is a part of the UnityEssentials Ecosystem",
   "unity": "6000.0",
   "unityRelease": null,
