@@ -54,7 +54,7 @@ A lightweight helper that automatically attaches to every `UIDocument` after sce
 - At least one `UIDocument` in your scene
 - Dependencies (Unity Essentials modules)
   - UI Toolkit Extensions: provides `UIDocument.AddStyleSheet(...)`
-  - Utilities – ResourceLoader: provides `ResourceLoader.LoadResource<StyleSheet>(..)`, used to load the USS
+  - Utilities – ResourceLoader: provides `ResourceLoader.TryGet<StyleSheet>(..)`, used to load the USS
 - Resources
   - `Resources/UnityEssentials_USS_Tooltip.uss` (included in this package)
 
