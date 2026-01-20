@@ -41,7 +41,7 @@ namespace UnityEssentials
                 return;
             }
 
-            var tooltipUSS = ResourceLoader.TryGet<StyleSheet>("UnityEssentials_USS_Tooltip");
+            var tooltipUSS = AssetResolver.TryGet<StyleSheet>("UnityEssentials_USS_Tooltip");
             document.AddStyleSheet(tooltipUSS);
 
             _root = document.rootVisualElement;
