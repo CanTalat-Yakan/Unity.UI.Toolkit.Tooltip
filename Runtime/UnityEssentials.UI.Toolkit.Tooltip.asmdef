@@ -1,5 +1,5 @@
 {
-    "name": "UnityEssentials.UIToolkitTooltip",
+    "name": "UnityEssentials.UI.Toolkit.Tooltip",
     "rootNamespace": "UnityEssentials",
     "references": [
         "GUID:fd1e7b63e0e7d634db53519cc860fe3a",
