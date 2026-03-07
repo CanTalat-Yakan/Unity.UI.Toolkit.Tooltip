@@ -23,17 +23,15 @@ namespace UnityEssentials
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void AddTooltipHelpersToUIDocuments()
         {
-            return;
-            var documents = FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
-            foreach (var document in documents)
-                if (document.GetComponent<TooltipHelper>() == null)
-                    document.gameObject.AddComponent<TooltipHelper>();
+            // var documents = FindObjectsByType<UIDocument>();
+            // foreach (var document in documents)
+            //     if (document.GetComponent<TooltipHelper>() == null)
+            //         document.gameObject.AddComponent<TooltipHelper>();
 
         }
 
         private void Awake()
         {
-            return;
             var document = GetComponent<UIDocument>();
             if (document == null)
             {
@@ -60,7 +58,6 @@ namespace UnityEssentials
 
         private void Update()
         {
-            return;
             _root ??= GetComponent<UIDocument>().rootVisualElement;
             if (_root?.panel == null)
                 return;
